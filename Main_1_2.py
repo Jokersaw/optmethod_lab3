@@ -9,18 +9,20 @@ def SGD(X, y, a0, b0, c0, learning_rate, cnt_max_iterations, batch_size, learnin
         # создаем массивы данных размером batch_size
         # простыми словами: случайным образом сгенерировали батч точек, которые собираемся рассматривать
         indexes = np.random.randint(0, len(X) - 1, batch_size)
+        # реальные данные (аргументы , реальные значения от этих аргументов)
         X_batch = X[indexes]
         y_batch = y[indexes]
 
         # считаем значение для текущих коэффициентов
         y_exec = np.dot(X_batch, coefs) + c
 
+        # используем квадратичную функцию потерь
+        # квадратичная функция потерь = (линейная функция потерь) ^ 2
         # линейная ошибка (то_что_должно - то_что_получилось)
-        linear_error = y_batch - y_exec
-
+        # (производные у квадратичной функции потерь)
         # расчет градиентов вектора и свободного скаляра
-        coefs_grad = -2 * np.dot(X_batch.T, linear_error) / batch_size
-        c_grad = -2 * np.sum(linear_error) / batch_size
+        coefs_grad = -2 * np.dot(X_batch.T, y_batch - y_exec) / batch_size
+        c_grad = -2 * np.sum(y_batch - y_exec) / batch_size
 
         # идем вдоль антиградиента
         coefs -= learning_rate * coefs_grad
@@ -28,10 +30,10 @@ def SGD(X, y, a0, b0, c0, learning_rate, cnt_max_iterations, batch_size, learnin
 
         # меняем шаг
         if learning_rate_scheduling == "exponential":
-            learning_rate *= 0.9
+            learning_rate *= 0.999
         elif learning_rate_scheduling == "stepwise":
-            if i % 50 == 0:
-                learning_rate *= 0.6
+            if i % 100 == 0:
+                learning_rate *= 0.7
 
     return coefs, c
 
