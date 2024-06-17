@@ -7,6 +7,7 @@ def SGD(X, y, a0, b0, c0, learning_rate, cnt_max_iterations, batch_size, learnin
     for i in range(cnt_max_iterations):
 
         # создаем массивы данных размером batch_size
+        # простыми словами: случайным образом сгенерировали батч точек, которые собираемся рассматривать
         indexes = np.random.randint(0, len(X) - 1, batch_size)
         X_batch = X[indexes]
         y_batch = y[indexes]
