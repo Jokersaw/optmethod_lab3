@@ -37,6 +37,8 @@ def SGD(X, y, a0, b0, c0, learning_rate, cnt_max_iterations, batch_size, learnin
 
     return coefs, c
 
+# начало работы программы (время):
+start = time.time()
 
 # инициализация реальных коэффициентов
 a_real = 3
@@ -72,14 +74,22 @@ for batch_size_part in [0, 30, 50, 100]:
         # запуск функции
         coefs_out, c_out = SGD(X, y, a_start, b_start, c_start, learning_rate, cnt_max_iterations, batch_size_start, learning_rate_scheduling_start)
 
+        # конец работы программы (время):
+        end = time.time()
+
+        count_function_runs = cnt_max_iterations * batch_size_start
+        count_gradient_runs = cnt_max_iterations * batch_size_start
+
         # вывод результатов
         print(f'cnt_features: {cnt_features}, learning rate: {learning_rate}, cnt_max_iterations: {cnt_max_iterations}')
         print(f'batch size: {batch_size_start}, learning rate scheduling: {learning_rate_scheduling_start}')
         print(f'a_real: {a_real}, b_real: {b_real}, c_real: {c_real}')
         print(f'a_exec: {coefs_out[0]}, b_exec: {coefs_out[1]}, c_exec: {c_out}')
+        print(f'count_function_runs: {count_function_runs}\ncount_gradient_runs: {count_gradient_runs}\nwork time: {(end - start) * 10 ** 3} ms')
         print()
 
-
+        # начало работы программы (время):
+        start = time.time()
 
 
 
