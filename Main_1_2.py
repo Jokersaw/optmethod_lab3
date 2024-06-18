@@ -85,6 +85,7 @@ for batch_size_part in [0, 30, 50, 100]:
         print(f'batch size: {batch_size_start}, learning rate scheduling: {learning_rate_scheduling_start}')
         print(f'a_real: {a_real}, b_real: {b_real}, c_real: {c_real}')
         print(f'a_exec: {coefs_out[0]}, b_exec: {coefs_out[1]}, c_exec: {c_out}')
+        print(f'a_diff: {a_real - coefs_out[0]}, b_diff: {b_real - coefs_out[1]}, c_diff: {c_real - c_out}')
         print(f'count_function_runs: {count_function_runs}\ncount_gradient_runs: {count_gradient_runs}\nwork time: {(end - start) * 10 ** 3} ms')
         print()
 
