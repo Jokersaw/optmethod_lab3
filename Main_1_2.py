@@ -1,6 +1,10 @@
+import time
+import tracemalloc
+
 import numpy as np
 
 def SGD(X, y, a0, b0, c0, learning_rate, cnt_max_iterations, batch_size, learning_rate_scheduling):
+
     coefs = np.array([a0, b0])
     c = c0
 
@@ -32,27 +36,27 @@ def SGD(X, y, a0, b0, c0, learning_rate, cnt_max_iterations, batch_size, learnin
         if learning_rate_scheduling == "exponential":
             learning_rate *= 0.999
         elif learning_rate_scheduling == "stepwise":
-            if i % 100 == 0:
-                learning_rate *= 0.7
+            if i % 200 == 0:
+                learning_rate *= 0.8
 
     return coefs, c
+
 
 # начало работы программы (время):
 start = time.time()
 
 # инициализация реальных коэффициентов
 a_real = 3
-b_real = 20
-c_real = 100
-
+b_real = 8
+c_real = 50
 
 # инициализация тренировочных данных
-cnt_features = 100
-X = (np.random.rand(cnt_features, 2) * 2 - 1) * 10
+cnt_features = 1000
+X = ((np.random.rand(cnt_features, 2) * 2 - 1) * 3) ** 2
 y = (np.dot(X, [a_real, b_real]) + c_real + np.random.rand(1, cnt_features))[0]
 
 learning_rate = 0.01
-cnt_max_iterations = 1000
+epochs = 1000
 
 # инициализация стартовых коэффициентов
 a_start = np.random.random() * 10
@@ -71,13 +75,20 @@ for batch_size_part in [0, 30, 50, 100]:
 
     for learning_rate_scheduling_start in ["none", "exponential", "stepwise"]:
 
-        # запуск функции
-        coefs_out, c_out = SGD(X, y, a_start, b_start, c_start, learning_rate, cnt_max_iterations, batch_size_start, learning_rate_scheduling_start)
+        # начинаем считать память
+        tracemalloc.start()
 
+        # запуск функции
+        coefs_out, c_out = SGD(X, y, a_start, b_start, c_start, learning_rate, epochs, batch_size_start, learning_rate_scheduling_start)
+
+        # фиксируем результаты вычислений памяти
+        memory = tracemalloc.get_traced_memory()
+
+        # заканчиваем считать память
+        tracemalloc.stop()
         # конец работы программы (время):
         end = time.time()
 
-        
         # вывод результатов
         print(f'cnt_features: {cnt_features}, learning rate: {learning_rate}, epochs: {epochs}')
         print(f'batch size: {batch_size_start}, learning rate scheduling: {learning_rate_scheduling_start}')
@@ -90,6 +101,7 @@ for batch_size_part in [0, 30, 50, 100]:
 
         # начало работы программы (время):
         start = time.time()
+
 
 
 
