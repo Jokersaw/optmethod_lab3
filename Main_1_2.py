@@ -52,7 +52,7 @@ c_real = 50
 
 # инициализация тренировочных данных
 cnt_features = 1000
-X = ((np.random.rand(cnt_features, 2) * 2 - 1) * 3) ** 2
+X = (np.random.rand(cnt_features, 2) * 2 - 1) * 3
 y = (np.dot(X, [a_real, b_real]) + c_real + np.random.rand(1, cnt_features))[0]
 
 learning_rate = 0.01
@@ -88,13 +88,17 @@ for batch_size_part in [0, 30, 50, 100]:
         tracemalloc.stop()
         # конец работы программы (время):
         end = time.time()
+        
+        a_diff = a_real - coefs_out[0]
+        b_diff = b_real - coefs_out[1]
+        c_diff = c_real - c_out
 
         # вывод результатов
         print(f'cnt_features: {cnt_features}, learning rate: {learning_rate}, epochs: {epochs}')
         print(f'batch size: {batch_size_start}, learning rate scheduling: {learning_rate_scheduling_start}')
         print(f'a_real: {a_real}, b_real: {b_real}, c_real: {c_real}')
         print(f'a_exec: {coefs_out[0]}, b_exec: {coefs_out[1]}, c_exec: {c_out}')
-        print(f'a_diff: {a_real - coefs_out[0]}, b_diff: {b_real - coefs_out[1]}, c_diff: {c_real - c_out}')
+        print(f'a_diff: {a_diff}, b_diff: {b_diff}, c_diff: {c_diff}')
         print(f'count_function_runs: {9 * batch_size_start * epochs}\n')
         print(f'work time: {(end - start) * 10 ** 3} ms\nmemory: {memory[1]} bytes')
         print()
