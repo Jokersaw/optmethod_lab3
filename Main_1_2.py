@@ -99,7 +99,7 @@ for batch_size_part in [0, 30, 50, 100]:
         print(f'a_real: {a_real}, b_real: {b_real}, c_real: {c_real}')
         print(f'a_exec: {coefs_out[0]}, b_exec: {coefs_out[1]}, c_exec: {c_out}')
         print(f'a_diff: {a_diff}, b_diff: {b_diff}, c_diff: {c_diff}')
-        print(f'count_function_runs: {9 * batch_size_start * epochs}\n')
+        print(f'count_function_operations: {9 * batch_size_start * epochs}\n')
         print(f'work time: {(end - start) * 10 ** 3} ms\nmemory: {memory[1]} bytes')
         print()
 
