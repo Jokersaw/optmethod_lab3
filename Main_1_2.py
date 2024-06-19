@@ -77,15 +77,15 @@ for batch_size_part in [0, 30, 50, 100]:
         # конец работы программы (время):
         end = time.time()
 
-        count_operations = cnt_max_iterations * batch_size_start
-
+        
         # вывод результатов
-        print(f'cnt_features: {cnt_features}, learning rate: {learning_rate}, cnt_max_iterations: {cnt_max_iterations}')
+        print(f'cnt_features: {cnt_features}, learning rate: {learning_rate}, epochs: {epochs}')
         print(f'batch size: {batch_size_start}, learning rate scheduling: {learning_rate_scheduling_start}')
         print(f'a_real: {a_real}, b_real: {b_real}, c_real: {c_real}')
         print(f'a_exec: {coefs_out[0]}, b_exec: {coefs_out[1]}, c_exec: {c_out}')
         print(f'a_diff: {a_real - coefs_out[0]}, b_diff: {b_real - coefs_out[1]}, c_diff: {c_real - c_out}')
-        print(f'count_operations: {count_operations}\nwork time: {(end - start) * 10 ** 3} ms')
+        print(f'count_function_runs: {9 * batch_size_start * epochs}\n')
+        print(f'work time: {(end - start) * 10 ** 3} ms\nmemory: {memory[1]} bytes')
         print()
 
         # начало работы программы (время):
