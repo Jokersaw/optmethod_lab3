@@ -75,7 +75,6 @@ for batch_size_part in [0, 10, 70, 100]:
     # реальный размер батча (считается как часть от общего количества данных)
     # [если batch_size_part равен 0, то размер батча должен быть равен 1]
     batch_size_start = max(1, cnt_features * batch_size_part // 100)
-    # batch_size_start = batch_size_part
 
     for learning_rate_scheduling_start in ["none", "exponential",  "stepwise"]:
 
