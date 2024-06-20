@@ -1,8 +1,6 @@
 import time
-
 import tensorflow as tf
 import tracemalloc
-
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -45,19 +43,19 @@ learning_rate_adam = 0.01
 epochs_sgd = 100
 epochs_nesterov = 100
 epochs_momentum = 100
-epochs_adagard = 100
+epochs_adagard = 200
 epochs_rmsprop = 100
 epochs_adam = 100
 
-batch_size_sgd = 500
-batch_size_nesterov = 500
-batch_size_momentum = 500
-batch_size_adagard = 500
-batch_size_rmsprop = 500
-batch_size_adam = 500
+batch_size_sgd = 100
+batch_size_nesterov = 100
+batch_size_momentum = 100
+batch_size_adagard = 100
+batch_size_rmsprop = 100
+batch_size_adam = 100
 
 
-def dump(model, name, time, memory, learning_rate, cnt_max_iterations, batch_size):
+def dump(model, name, time, memory, mse, learning_rate, cnt_max_iterations, batch_size):
     a_out = model.layers[0].get_weights()[0][0][0]
     b_out = model.layers[0].get_weights()[0][1][0]
     c_out = model.layers[0].get_weights()[1][0]
@@ -66,7 +64,8 @@ def dump(model, name, time, memory, learning_rate, cnt_max_iterations, batch_siz
     print(f'batch size: {batch_size}')
     print(f'a_real: {a_real}, b_real: {b_real}, c_real: {c_real}')
     print(f'a_exec: {a_out}, b_exec: {b_out}, c_exec: {c_out}')
-    print(f'a_diff: {a_real - a_out}, b_diff: {b_real - b_out}, c_diff: {c_real - c_out}')
+    print(f'a_diff: {abs(a_real - a_out)}, b_diff: {abs(b_real - b_out)}, c_diff: {abs(c_real - c_out)}')
+    print(f'mse: {mse}')
     print(f'work time: {time} ms\nmemory: {memory[1]} bytes')
     print(f'--- {name} ---')
     print()
@@ -79,7 +78,7 @@ model_sgd, mse_sgd, history_sgd = train_model(sgd_optimizer, epochs_sgd, batch_s
 memory = tracemalloc.get_traced_memory()
 tracemalloc.stop()
 end = time.time()
-dump(model_sgd, "SGD", (end - start) * 10 ** 3, memory, learning_rate_sgd, epochs_sgd, batch_size_sgd)
+dump(model_sgd, "SGD", (end - start) * 10 ** 3, memory, mse_sgd, learning_rate_sgd, epochs_sgd, batch_size_sgd)
 
 # Nesterov
 start = time.time()
@@ -89,7 +88,7 @@ model_nesterov, mse_nesterov, history_nesterov = train_model(sgd_nesterov_optimi
 memory = tracemalloc.get_traced_memory()
 tracemalloc.stop()
 end = time.time()
-dump(model_nesterov, "NESTEROV", (end - start) * 10 ** 3, memory, learning_rate_nesterov, epochs_nesterov, batch_size_nesterov)
+dump(model_nesterov, "NESTEROV", (end - start) * 10 ** 3, memory, mse_nesterov, learning_rate_nesterov, epochs_nesterov, batch_size_nesterov)
 
 # Momentum
 start = time.time()
@@ -99,7 +98,7 @@ model_momentum, mse_momentum, history_momentum = train_model(sgd_momentum_optimi
 memory = tracemalloc.get_traced_memory()
 tracemalloc.stop()
 end = time.time()
-dump(model_momentum, "MOMENTUM", (end - start) * 10 ** 3, memory, learning_rate_momentum, epochs_momentum, batch_size_momentum)
+dump(model_momentum, "MOMENTUM", (end - start) * 10 ** 3, memory, mse_momentum, learning_rate_momentum, epochs_momentum, batch_size_momentum)
 
 # AdaGrad
 start = time.time()
@@ -109,7 +108,7 @@ model_adagrad, mse_adagrad, history_adagrad = train_model(adagrad_optimizer, epo
 memory = tracemalloc.get_traced_memory()
 tracemalloc.stop()
 end = time.time()
-dump(model_adagrad, "ADAGARD", (end - start) * 10 ** 3, memory, learning_rate_adagard, epochs_adagard, batch_size_adagard)
+dump(model_adagrad, "ADAGARD", (end - start) * 10 ** 3, memory, mse_adagrad, learning_rate_adagard, epochs_adagard, batch_size_adagard)
 
 # RMSProp
 start = time.time()
@@ -119,7 +118,7 @@ model_rmsprop, mse_rmsprop, history_rmsprop = train_model(rmsprop_optimizer, epo
 memory = tracemalloc.get_traced_memory()
 tracemalloc.stop()
 end = time.time()
-dump(model_rmsprop, "RMSPROP", (end - start) * 10 ** 3, memory, learning_rate_rmsprop, epochs_rmsprop, batch_size_rmsprop)
+dump(model_rmsprop, "RMSPROP", (end - start) * 10 ** 3, memory, mse_rmsprop, learning_rate_rmsprop, epochs_rmsprop, batch_size_rmsprop)
 
 # Adam
 start = time.time()
@@ -129,9 +128,8 @@ model_adam, mse_adam, history_adam = train_model(adam_optimizer, epochs_adam, ba
 memory = tracemalloc.get_traced_memory()
 tracemalloc.stop()
 end = time.time()
-dump(model_adam, "ADAM", (end - start) * 10 ** 3, memory, learning_rate_adam, epochs_adam, batch_size_adam)
+dump(model_adam, "ADAM", (end - start) * 10 ** 3, memory, mse_adam, learning_rate_adam, epochs_adam, batch_size_adam)
 
-print(history_sgd.history['loss'])
 # Визуализация процесса обучения
 plt.figure(figsize=(10, 6))
 plt.plot(history_sgd.history['loss'], label='SGD')
